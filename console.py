@@ -31,6 +31,22 @@ class HBNBCommand(cmd.Cmd):
         'latitude': float, 'longitude': float
     }
 
+    def num_or_float(self, arg: str):
+        """
+        Method to convert str to int or float
+        Returns float or int in success or the
+        same type of data in failure
+        """
+        try:
+            return int(arg)
+        except Exception:
+            pass
+
+        try:
+            return float(arg)
+        except Exception:
+            return arg
+
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
@@ -128,6 +144,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
 
+        # create User name='Cristian' phone='3197438116' latitude='8.8'
         # Getting attributes
         attributes = {}
         for attr in args[1:]:
@@ -137,8 +154,9 @@ class HBNBCommand(cmd.Cmd):
         new_instance = HBNBCommand.classes[className]()
 
         for key, value in attributes.items():
-            if isinstance(value, str):
-                value = value.strip("\"'")
+            value = value.strip("\"'").replace("_", " ")
+            value = self.num_or_float(value)
+            print(type(value), value)
             setattr(new_instance, key, value)
 
         storage.save()
