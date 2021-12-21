@@ -1,0 +1,14 @@
+{
+    "User.aefd0079-4240-4d6c-9ec9-d9eb86aad8c2": {
+        "id": "aefd0079-4240-4d6c-9ec9-d9eb86aad8c2",
+        "created_at": "2021-12-20T15:44:11.512686",
+        "updated_at": "2021-12-20T15:44:11.512731",
+        "__class__": "User"
+    },
+    "User.a7dcc1e3-4863-49b3-94ef-3397e7c8bced": {
+        "id": "a7dcc1e3-4863-49b3-94ef-3397e7c8bced",
+        "created_at": "2021-12-20T15:44:23.501423",
+        "updated_at": "2021-12-20T15:44:23.501446",
+        "__class__": "User"
+    }
+}
