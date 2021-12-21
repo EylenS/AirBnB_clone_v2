@@ -38,16 +38,17 @@ class DBStorage:
         from models.review import Review
         from models.state import State
         from models.user import User
-        classList = [City, State]
+        classDict = {"City": City, "State": State,
+                     "User": User, "Place": Place}
 
         objects = {}
         if cls is None:
-            for className in classList:
-                data = self.__session.query(className).all()
+            for className in classDict:
+                data = self.__session.query(classDict[className]).all()
                 for obj in data:
                     objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
-        elif (cls in classList):
-            data = self.__session().query(cls).all()
+        elif (cls in classDict):
+            data = self.__session.query(classDict[cls]).all()
             for obj in data:
                 objects[f"{obj.id}"] = obj
 
