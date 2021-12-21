@@ -17,9 +17,8 @@ class User(BaseModel, Base):
         backref='user',
         cascade="all, delete",
         passive_deletes=True)
-
-    """class Item(Base):
-    __tablename__ = 'item'
-
-    order = relationship("Order",
-                    backref=backref("user", cascade="all, delete-orphan")"""
+    reviews = relationship(
+        "Review",
+        backref='user',
+        cascade="all, delete",
+        passive_deletes=True)

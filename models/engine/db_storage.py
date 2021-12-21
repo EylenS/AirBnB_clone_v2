@@ -39,7 +39,8 @@ class DBStorage:
         from models.state import State
         from models.user import User
         classDict = {"City": City, "State": State,
-                     "User": User, "Place": Place}
+                     "User": User, "Place": Place,
+                     "State": State, "Amenity": Amenity}
 
         objects = {}
         if cls is None:
