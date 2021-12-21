@@ -13,7 +13,13 @@ class User(BaseModel, Base):
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
     places = relationship(
-         "Place",
-         backref='user',
-         cascade="all, delete",
-         passive_deletes=True)
+        "Place",
+        backref='user',
+        cascade="all, delete",
+        passive_deletes=True)
+
+    """class Item(Base):
+    __tablename__ = 'item'
+
+    order = relationship("Order",
+                    backref=backref("user", cascade="all, delete-orphan")"""
