@@ -14,4 +14,4 @@ class City(BaseModel, Base):
     #     "Place",
     #     backref='cities',
     #     cascade="all, delete",
-    #     passive_deletes=all)
+    #     passive_deletes=True)

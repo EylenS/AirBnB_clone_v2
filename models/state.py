@@ -15,7 +15,7 @@ class State(BaseModel, Base):
         "City",
         backref='state',
         cascade="all, delete",
-        passive_deletes=all)
+        passive_deletes=True)
 
     @property
     def cities(self):
