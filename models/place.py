@@ -5,6 +5,7 @@ from sqlalchemy.sql.schema import Table
 from sqlalchemy.sql.sqltypes import Float, Integer
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
+from models.review import Review
 
 
 place_amenity = Table(
@@ -48,19 +49,18 @@ class Place(BaseModel, Base):
         passive_deletes=True)
 
     @property
-    def amenities(self):
+    def reviews(self):
         """ Getter instance method """
         from models import storage
-        from models.amenity import Amenity
 
-        all_amenities = storage.all(Amenity)
-        amenitie_list = []
+        all_reviews = storage.all(Review)
+        review_list = []
 
-        for amenity in all_amenities.values():
-            if amenity.id in self.amenity_ids:
-                amenitie_list.append(amenity)
+        for review in all_reviews.values():
+            if review.place_id == self.id:
+                review_list.append(review)
 
-        return amenitie_list
+        return review_list
 
     @amenities.setter
     def amenities(self, obj):
@@ -68,12 +68,6 @@ class Place(BaseModel, Base):
         Setter attribute amenities that handles append method
         for adding an Amenity.id to the attribute amenity_ids.
         """
-        from models.review import Review
-        from models import storage
-        reviews = []
-        all_reviews = storage.all(Review)
-        for review in all_reviews:
-            if review.place_id == (self.id):
-                reviews.append(review)
-
-        return reviews
+        from models.amenity import Amenity
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)
