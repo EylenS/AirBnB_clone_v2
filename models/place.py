@@ -6,7 +6,7 @@ from sqlalchemy.sql.sqltypes import Float, Integer
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from models.review import Review
-
+import models
 
 place_amenity = Table(
     'place_amenity', Base.metadata,
@@ -50,17 +50,13 @@ class Place(BaseModel, Base):
 
     @property
     def reviews(self):
-        """ Getter instance method """
-        from models import storage
-
-        all_reviews = storage.all(Review)
-        review_list = []
-
-        for review in all_reviews.values():
-            if review.place_id == (self.id):
-                review_list.append(review)
-
-        return review_list
+        """ Getter that that returns the list of Reviews instances """
+        review_instances = models.storage.all(Review)
+        new_list = []
+        for value in review_instances.values():
+            if value.place_id == (self.id):
+                new_list.append(value)
+        return (new_list)
 
     @reviews.setter
     def amenities(self, obj):
