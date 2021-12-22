@@ -57,12 +57,12 @@ class Place(BaseModel, Base):
         review_list = []
 
         for review in all_reviews.values():
-            if review.place_id == self.id:
+            if review.place_id == (self.id):
                 review_list.append(review)
 
         return review_list
 
-    @amenities.setter
+    @reviews.setter
     def amenities(self, obj):
         """
         Setter attribute amenities that handles append method
