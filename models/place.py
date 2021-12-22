@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql.schema import Table
 from sqlalchemy.sql.sqltypes import Float, Integer
 from models.base_model import BaseModel, Base
