@@ -7,19 +7,22 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from models.review import Review
 import models
-from os import getenv
 
-
-if getenv("HBNB_TYPE_STORAGE") == "db":
-    place_amenity = Table('place_amenity', Base.metadata,
-                          Column('place_id', String(60),
-                                 ForeignKey('places.id'),
-                                 primary_key=True,
-                                 nullable=False),
-                          Column('amenity_id', String(60),
-                                 ForeignKey('amenities.id'),
-                                 primary_key=True,
-                                 nullable=False))
+place_amenity = Table(
+    'place_amenity', Base.metadata,
+    Column(
+        'place_id',
+        String(60),
+        ForeignKey('places.id'),
+        primary_key=True,
+        nullable=False),
+    Column(
+        'amenity_id',
+        String(60),
+        ForeignKey('amenities.id'),
+        primary_key=True,
+        nullable=False)
+)
 
 
 class Place(BaseModel, Base):
@@ -37,35 +40,30 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
+    amenities = relationship(
+        'Amenity', secondary=place_amenity, viewonly=False)
+    reviews = relationship(
+        'Review',
+        backref='place',
+        cascade="all, delete, delete-orphan"
+    )
 
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        amenities = relationship(
-            'Amenity',
-            secondary=place_amenity,
-            viewonly=False)
+    @property
+    def reviews(self):
+        """ Getter that that returns the list of Reviews instances """
+        instances = models.storage.all(Review)
+        new = []
+        for review in instances.values():
+            if review.place_id == (self.id):
+                new.append(review)
+        return new
 
-        reviews = relationship(
-            'Review',
-            backref='place',
-            cascade="all, delete, delete-orphan")
-
-    else:
-        @property
-        def reviews(self):
-            """ Getter that that returns the list of Reviews instances """
-            instances = models.storage.all(Review)
-            new = []
-            for review in instances.values():
-                if review.place_id == (self.id):
-                    new.append(review)
-            return new
-
-        @reviews.setter
-        def amenities(self, obj):
-            """
-            Setter attribute amenities that handles append method
-            for adding an Amenity.id to the attribute amenity_ids.
-            """
-            from models.amenity import Amenity
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
+    @reviews.setter
+    def amenities(self, obj):
+        """
+        Setter attribute amenities that handles append method
+        for adding an Amenity.id to the attribute amenity_ids.
+        """
+        from models.amenity import Amenity
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)
