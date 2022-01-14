@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''Deploy web static'''
-from fabric.api import local, put, run, env
+from fabric.api import local, put, run, env, cd
 from datetime import date, datetime
 from os.path import exists
 
@@ -28,7 +28,9 @@ def do_deploy(archive_path):
         no_tgz = dir_ex.split('.')[0]
         path = '/data/web_static/releases/'
         # Upload the archive to the /tmp/ directory of the web server
-        put(archive_path, "/tmp/{}".format(dir_ex))
+        with cd("/tmp"):
+            put(archive_path, "{}".format(dir_ex), mode=664)
+        # make sure the directory is there
         run("mkdir -p {}{}/".format(path, no_tgz))
         # Uncompress the archive to the folder /data/web_static/releases/
         run("tar -xzf /tmp/{} -C {}{}/".format(dir_ex, path, no_tgz))
