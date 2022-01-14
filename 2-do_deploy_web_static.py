@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''Deploy web static'''
-from fabric.api import local, put, run, env, cd
+from fabric.api import put, run, env
 from datetime import date, datetime
 from os.path import exists
 
@@ -9,27 +9,14 @@ env.user = 'ubuntu'
 env.hosts = ['34.138.250.25', '50.17.152.241']
 
 
-def do_pack():
-    '''generates a .tgz archive from the contents of the web_static folder '''
-    local("mkdir -p versions")
-    date = datetime.now().strftime("%Y%m%d%H%M%S")
-    file = local(
-        "tar -cvzf versions/web_static_{}.tgz web_static".format(date))
-    if file:
-        return ("versions/web_static_{}.tgz web_static".format(date))
-    else:
-        return None
-
-
 def do_deploy(archive_path):
     '''This method deployes archive'''
     if exists(archive_path):
         dir_ex = archive_path.split('/')[-1]
         no_tgz = dir_ex.split('.')[0]
-        path = '/data/web_static/releases/'
+        path = "/data/web_static/releases/"
         # Upload the archive to the /tmp/ directory of the web server
-        with cd("/tmp"):
-            put(archive_path, "{}".format(dir_ex), mode=664)
+        put(archive_path, "/tmp/")
         # make sure the directory is there
         run("mkdir -p {}{}/".format(path, no_tgz))
         # Uncompress the archive to the folder /data/web_static/releases/
