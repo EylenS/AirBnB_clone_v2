@@ -5,6 +5,10 @@ from datetime import date, datetime
 from os.path import exists
 
 
+env.user = 'ubuntu'
+env.hosts = ['34.138.250.25', '50.17.152.241']
+
+
 def do_pack():
     '''generates a .tgz archive from the contents of the web_static folder '''
     local("mkdir -p versions")
