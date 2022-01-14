@@ -2,7 +2,7 @@
 '''Deploy web static'''
 from fabric.api import local, put, run, env
 from datetime import date, datetime
-from os.path import exists
+from os.path import exists, getsize
 
 
 env.user = 'ubuntu'
@@ -13,10 +13,10 @@ def do_pack():
     '''generates a .tgz archive from the contents of the web_static folder '''
     local("mkdir -p versions")
     date = datetime.now().strftime("%Y%m%d%H%M%S")
-    file = local(
-        "tar -cvzf versions/web_static_{}.tgz web_static".format(date))
-    if file:
-        return ("versions/web_static_{}.tgz web_static".format(date))
+    local("tar -cvzf versions/web_static_{}.tgz web_static".format(date))
+    archive_path = "versions/web_static_{}.tgz".format(date)
+    if exists(archive_path) and getsize(archive_path) > 0:
+        return archive_path
     else:
         return None
 
