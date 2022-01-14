@@ -20,6 +20,7 @@ def do_pack():
     else:
         return None
 
+
 def do_deploy(archive_path):
     '''This method deployes archive'''
     if exists(archive_path):
@@ -43,10 +44,10 @@ def do_deploy(archive_path):
     else:
         return False
 
+
 def deploy():
     '''creates and distributes an archive to your web servers'''
     archive_path = do_pack()
     if archive_path is None:
         return False
-    else:
-        return do_deploy(archive_path)
+    return do_deploy(archive_path)
